@@ -8,7 +8,7 @@ import javax.persistence.*;
 public abstract class MenuComponent {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;

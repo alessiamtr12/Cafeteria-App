@@ -28,9 +28,13 @@
     <div class="card" style="padding: 20px;">
       <h3>Create Menu Bundle</h3>
       <input id="menuName" class="input-field" placeholder="Menu Name" />
+      <input id="menuDescription" class="input-field" placeholder="Description" />
+
       <select id="menuComponents" multiple size="5" class="input-field" style="height: 100px;">
-        <option th:each="o : ${options}" th:value="${o.id}"
-                th:text="'[' + ${o.type} + '] ' + ${o.name}"></option>
+        <option th:each="o : ${options}"
+                th:value="${o.id}"
+                th:text="'[' + ${o.type} + '] ' + ${o.name}">
+        </option>
       </select>
       <button class="btn" onclick="submitMenu()">Create Menu</button>
     </div>
@@ -71,13 +75,23 @@
     const select = document.getElementById("menuComponents");
     const payload = {
       name: document.getElementById("menuName").value,
+      description: document.getElementById("menuDescription").value || "No description provided",
       componentIds: Array.from(select.selectedOptions).map(o => Number(o.value))
     };
-    await fetch("/admin/api/menus", {
+
+    const res = await fetch("/admin/api/menus", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify(payload)
     });
+
+    if (res.ok) location.reload();
+    else alert("Error creating menu");
+  }
+
+  async function deleteMenu(id) {
+    if (!confirm("Delete this menu?")) return;
+    await fetch(`/admin/api/menus/${id}`, { method: 'DELETE' });
     location.reload();
   }
 
