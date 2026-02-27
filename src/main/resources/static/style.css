@@ -1,0 +1,340 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+.home-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Centers everything vertically */
+    margin: 0;
+}
+
+.hero {
+    max-width: 500px;
+    width: 100%;
+}
+
+.login-card {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    text-align: center;
+}
+
+.login-card h3 {
+    margin-bottom: 5px;
+    color: #2C3E50;
+}
+
+.input-group {
+    margin-top: 30px;
+}
+
+input[type="number"] {
+    width: 100%;
+    padding: 15px;
+    border-radius: 12px;
+    border: 2px solid #eee;
+    margin-bottom: 20px;
+    font-size: 1rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+input[type="number"]:focus {
+    border-color: #E67E22;
+}
+
+.note {
+    font-size: 0.8rem;
+    color: #BDC3C7;
+    margin-top: 20px;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #FEF5E7; /* Warm Cream */
+    color: #2C3E50; /* Deep Charcoal */
+    margin: 0;
+    padding: 20px;
+    line-height: 1.6;
+}
+
+/* --- 2. Layout Containers --- */
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 50px;
+    padding: 20px;
+}
+
+.header h1 {
+    color: #E67E22; /* Warm Terracotta */
+    font-size: 2.8rem;
+    margin-bottom: 10px;
+}
+
+.header p {
+    color: #7F8C8D;
+    font-size: 1.1rem;
+}
+
+/* --- 3. The Grid System --- */
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-top: 20px;
+}
+
+/* --- 4. Food Cards --- */
+.card {
+    position: relative;
+    background: #ffffff;
+    border-radius: 20px;
+    overflow: hidden; /* Clips children to rounded corners */
+    box-shadow: 0 10px 20px rgba(230, 126, 34, 0.08);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(230, 126, 34, 0.1);
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(230, 126, 34, 0.15);
+}
+
+/* Placeholder for Image (if you add them later) */
+.card-image {
+    width: 100%;
+    height: 180px;
+    background-color: #f0f0f0;
+    background-image: linear-gradient(45deg, #eee 25%, transparent 25%, transparent 75%, #eee 75%, #eee 100%);
+    background-size: 20px 20px;
+}
+
+.card-content {
+    padding: 25px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.4rem;
+    color: #2C3E50;
+}
+
+.card p {
+    color: #7F8C8D;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+}
+
+/* --- 5. Price & Action Elements --- */
+.price-tag {
+    color: #27AE60; /* Fresh Green */
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+}
+
+.btn {
+    background: #E67E22; /* Action Orange */
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    width: 100%;
+}
+
+.btn:hover {
+    background: #D35400; /* Deep Terracotta */
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+/* --- 6. Responsive Fixes --- */
+@media (max-width: 600px) {
+    .header h1 {
+        font-size: 2rem;
+    }
+
+    body {
+        padding: 10px;
+    }
+}
+.favorite-heart {
+    position: absolute; /* Takes it out of the normal text flow */
+    top: 15px;          /* Distance from top edge */
+    right: 15px;        /* Distance from right edge */
+    font-size: 1.8rem;
+    cursor: pointer;
+    z-index: 10;        /* Ensures it stays on top of images/text */
+    color: #ccc;        /* Default gray */
+    transition: transform 0.2s, color 0.2s;
+    line-height: 1;     /* Prevents extra spacing */
+}
+
+.favorite-heart.active {
+    color: #e74c3c;
+}
+
+.favorite-heart:hover {
+    transform: scale(1.2);
+}
+
+.card h3 {
+    padding-right: 30px;
+    margin-top: 0;
+}
+
+.navbar {
+    display: flex;
+    justify-content: flex-end;
+    padding: 20px 40px;
+    background: transparent;
+}
+
+.login-link {
+    background: #E67E22;
+    color: white;
+    padding: 10px 25px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.login-link:hover {
+    background: #D35400;
+}
+
+.favorite-heart {
+    display: none;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: #ccc;
+    z-index: 10;
+}
+
+
+body.logged-in .favorite-heart {
+    display: block;
+}
+
+.favorite-heart-btn {
+    background: none;
+    border: none;
+    color: #ccc; /* Default Gray */
+    font-size: 1.8rem;
+    cursor: pointer;
+}
+
+.favorite-heart-btn.active {
+    color: #e74c3c; /* Red */
+}
+.navbar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 20px 40px;
+    gap: 20px;
+}
+
+.recs-link {
+    color: #E67E22;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 10px 20px;
+    border: 2px solid #E67E22;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+}
+
+.recs-link:hover {
+    background: #E67E22;
+    color: white;
+    box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+}
+.form-column {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 600px;
+}
+
+.dish-input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.menu-components {
+    margin-bottom: 15px;
+    background: rgba(230, 126, 34, 0.05); /* Very light orange background */
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.menu-components p {
+    margin: 0 0 5px 0;
+    font-size: 0.85rem;
+    color: #E67E22;
+}
+
+.component-list {
+    margin: 0;
+    padding-left: 18px;
+    list-style-type: circle;
+}
+
+.component-list li {
+    font-size: 0.8rem;
+    color: #555;
+    margin-bottom: 2px;
+}
+.toast-popup {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #27AE60;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.4s ease;
+    z-index: 1000;
+}
+
+.toast-popup.show {
+    opacity: 1;
+    transform: translateY(0);
+}

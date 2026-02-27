@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cafeteria Home</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+        }
+
+        .navbar {
+            background: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .navbar a {
+            margin-right: 15px;
+            text-decoration: none;
+            color: #007BFF;
+            font-weight: bold;
+        }
+
+        .navbar a:hover { text-decoration: underline; }
+
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.08);
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card h3 { margin-top: 0; }
+        .price-tag { font-weight: bold; margin: 10px 0; }
+        .btn {
+            padding: 10px;
+            background: #4CAF50;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn:hover { background: #45a049; }
+
+        .favorite-heart-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: gray;
+            margin-bottom: 10px;
+        }
+
+        .favorite-heart-btn.active { color: red; }
+
+        .toast-popup {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #333;
+            color: white;
+            padding: 15px;
+            border-radius: 6px;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .toast-popup.show { opacity: 1; }
+    </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div>
+        <th:block th:if="${userId != null}">
+            <a th:href="@{/recommendations(userId=${userId})}">Recommended</a>
+            <a th:href="@{/orders/view(userId=${userId})}">🛒 My Cart</a>
+            <a th:href="@{/user/profile(userId=${userId})}">👤 My Profile</a>
+        </th:block>
+    </div>
+
+    <div>
+        <a th:if="${userId == null}" th:href="@{/auth}">Login</a>
+        <a th:if="${userId != null}" th:href="@{/auth}">Logout</a>
+    </div>
+</div>
+
+<!-- HEADER -->
+<div class="container">
+    <div class="header">
+        <h1 th:text="${userId != null} ? 'Welcome Back, User #' + ${userId} : 'Welcome to Our Cafeteria'">
+            Welcome
+        </h1>
+    </div>
+
+    <div th:if="${message}" class="header" style="background:#D4EFDF;color:#1E8449;">
+        <p th:text="${message}"></p>
+    </div>
+
+    <!-- MENU GRID -->
+    <div class="menu-grid">
+        <div th:each="item : ${items}" class="card">
+
+            <button th:if="${userId != null}"
+                    class="favorite-heart-btn"
+                    th:classappend="${userFavorites != null and userFavorites.contains(item)} ? 'active' : ''"
+                    th:onclick="|toggleHeart(this, ${userId}, ${item.id})|">
+                ❤
+            </button>
+
+            <h3 th:text="${item.name}">Item Name</h3>
+
+            <p th:if="${item instanceof T(org.example.helloworld.model.Dish)}"
+               th:text="${item.description}">Description</p>
+
+            <ul th:if="${item instanceof T(org.example.helloworld.model.Menu)}">
+                <li th:each="comp : ${item.components}" th:text="${comp.name}">Component Name</li>
+            </ul>
+
+            <div class="price-tag" th:text="'$' + ${#numbers.formatDecimal(item.computePrice(),1,2)}">$0.00</div>
+
+            <button class="btn" th:onclick="|addToOrder(${userId}, ${item.id})|">Add to Order</button>
+
+        </div>
+    </div>
+</div>
+
+<!-- JS -->
+<script>
+    function toggleHeart(el, userId, itemId) {
+        fetch(`/favorites/${userId}/toggle/${itemId}`, { method: 'POST' })
+            .then(r => r.ok && el.classList.toggle('active'));
+    }
+
+    function addToOrder(userId, itemId) {
+        if (!userId) {
+            showPopup("Please login first");
+            return;
+        }
+
+        fetch(`/orders/add?userId=${userId}&itemId=${itemId}`, { method: 'POST' })
+            .then(r => r.ok && showPopup("Added to tray"));
+    }
+
+    function showPopup(msg) {
+        const p = document.createElement('div');
+        p.className = 'toast-popup';
+        p.innerText = msg;
+        document.body.appendChild(p);
+        setTimeout(() => p.classList.add('show'), 10);
+        setTimeout(() => {
+            p.classList.remove('show');
+            setTimeout(() => p.remove(), 500);
+        }, 3000);
+    }
+</script>
+
+</body>
+</html>

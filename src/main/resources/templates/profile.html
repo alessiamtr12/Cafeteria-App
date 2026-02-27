@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Profile</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <style>
+        body { font-family: Arial; background: #f8f8f8; }
+        .container {
+            max-width: 500px;
+            margin: 60px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover { background: #45a049; }
+        .success { color: green; text-align: center; margin-top: 10px; }
+        .readonly {
+            background: #eee;
+        }
+        a { display: block; margin-top: 15px; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>User Profile</h2>
+
+    <form th:action="@{/user/profile}" method="post">
+        <input type="hidden" name="userId" th:value="${user.id}"/>
+
+        <label>Username</label>
+        <input class="readonly" th:value="${user.username}" readonly>
+
+        <label>Role</label>
+        <input class="readonly" th:value="${user.role}" readonly>
+
+        <label>Email</label>
+        <input name="email" th:value="${user.email}" placeholder="Email">
+
+        <label>Phone</label>
+        <input name="phone" th:value="${user.phone}" placeholder="Phone">
+
+        <label>Balance</label>
+        <input type="number" step="0.01" name="balance" th:value="${user.balance}">
+
+        <button type="submit">Save Changes</button>
+    </form>
+
+    <p class="success" th:text="${success}"></p>
+
+    <a th:href="@{/home(userId=${user.id})}">⬅ Back to Home</a>
+</div>
+
+</body>
+</html>

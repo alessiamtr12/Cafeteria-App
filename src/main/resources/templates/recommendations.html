@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <title>Menu Recommendations</title>
+  <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+
+<div class="navbar">
+  <div id="nav-links">
+    <a th:href="@{/}" class="login-link">← Back to Menu</a>
+
+    <a sec:authorize="isAuthenticated()" th:href="@{/orders/view}" class="cart-link recs-link">
+      🛒 My Cart
+    </a>
+  </div>
+</div>
+
+<div class="header">
+  <h1>Your Personalized Menu</h1>
+  <p>Based on your favorites, we think you'll love these!</p>
+</div>
+
+<div class="container">
+  <div id="menu-container" class="menu-grid">
+    <div th:each="item : ${recommendations}" class="card">
+      <div class="card-content">
+        <h3 th:text="${item.name}">Item Name</h3>
+
+        <p th:if="${item instanceof T(org.example.helloworld.model.Dish)}"
+           th:text="${item.description}">Description</p>
+
+        <div th:if="${item instanceof T(org.example.helloworld.model.Menu)}" class="menu-components">
+          <p><strong>Includes:</strong></p>
+          <ul class="component-list">
+            <li th:each="comp : ${item.components}" th:text="${comp.name}">Component Name</li>
+          </ul>
+        </div>
+
+        <div class="price-tag" th:text="'$' + ${#numbers.formatDecimal(item.computePrice(), 1, 2)}">$0.00</div>
+      </div>
+
+      <button type="button" class="btn"
+              th:onclick="|addToOrder(${item.id})|">
+        Add to Order
+      </button>
+    </div>
+  </div>
+
+  <p th:if="${#lists.isEmpty(recommendations)}">Oops! We couldn't find any recommendations for you right now.</p>
+</div>
+
+<script>
+  async function addToOrder(itemId) {
+    try {
+      const response = await fetch(`/orders/add?itemId=${itemId}`, {
+        method: 'POST'
+      });
+
+      if (response.ok) {
+        const itemName = await response.text();
+        showPopup(`${itemName} added to your tray!`);
+      } else if (response.status === 403 || response.status === 401) {
+        showPopup("Please sign in first to add items to your tray!");
+      }
+    } catch (error) {
+      console.error("Error adding to order:", error);
+    }
+  }
+
+  function showPopup(message) {
+    const popup = document.createElement('div');
+    popup.className = 'toast-popup';
+    popup.innerText = message;
+    document.body.appendChild(popup);
+    setTimeout(() => popup.classList.add('show'), 10);
+    setTimeout(() => {
+      popup.classList.remove('show');
+      setTimeout(() => popup.remove(), 500);
+    }, 3000);
+  }
+</script>
+</body>
+</html>
